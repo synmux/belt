@@ -5,4 +5,4 @@ BELT_MISE_ACTIVE = 'true'
 env_file = '.env'
 
 [tools]
-python = { version = '3.13.3' }
+python = { version = '3.14.6' }

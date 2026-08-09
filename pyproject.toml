@@ -3,7 +3,7 @@ build-backend = "poetry.core.masonry.api"
 requires = ["poetry-core>=2.0.1"]
 
 [project]
-authors = [{ email = "dave@dave.io", name = "Dave Williams" }]
+authors = [{ email = "syn@syn.as", name = "syn" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3.11",
@@ -14,23 +14,23 @@ classifiers = [
 dependencies = [
   "betterconf >= 4.5.0",
   "chevron >= 0.14.0",
-  "click >= 8.1.8",
+  "click >= 8.4.2",
   "colorama >= 0.4.6",
-  "cryptography >= 44.0.2",
-  "dnspython >= 2.7.0",
-  "mutagen >= 1.47.0",
-  "poetry >= 2.1.1",
+  "cryptography >= 50.0.0",
+  "dnspython >= 2.8.0",
+  "mutagen >= 1.48.1",
+  "poetry >= 2.4.1",
   "poetry-plugin-shell >= 1.0.1",
   "putio-py >= 8.8.0",
-  "pytz >= 2025.1",
+  "pytz >= 2026.3.post1",
   "pyxdg >= 0.28",
-  "pyyaml >= 6.0.2",
-  "requests >= 2.32.3",
-  "showcert >= 0.3.3",
-  "types-chevron >= 0.14.2.20250103",
-  "wireguard-tools >= 0.5.2",
-  "bpython >= 0.25",
-  "ipython >= 9.0.1",
+  "pyyaml >= 6.0.3",
+  "requests >= 2.34.2",
+  "showcert >= 0.4.16",
+  "types-chevron >= 0.14.2.20260408",
+  "wireguard-tools >= 0.6.0",
+  "bpython >= 0.26",
+  "ipython >= 9.16.0",
   "base58 >= 2.1.1",
 ]
 description = "CLI toolbelt"
@@ -41,7 +41,7 @@ packages = [{ from = "src", include = "*.py" }]
 readme = "README.md"
 repository = "https://github.com/daveio/belt"
 requires-python = ">=3.11, <4.0"
-version = "0.1.8"
+version = "0.1.9"
 
 [project.scripts]
 belt = 'belt_cli:cli'
