@@ -19,18 +19,13 @@ dependencies = [
   "cryptography >= 50.0.0",
   "dnspython >= 2.8.0",
   "mutagen >= 1.48.1",
-  "poetry >= 2.4.1",
-  "poetry-plugin-shell >= 1.0.1",
   "putio-py >= 8.8.0",
   "pytz >= 2026.3.post1",
   "pyxdg >= 0.28",
   "pyyaml >= 6.0.3",
   "requests >= 2.34.2",
   "showcert >= 0.4.16",
-  "types-chevron >= 0.14.2.20260408",
   "wireguard-tools >= 0.6.0",
-  "bpython >= 0.26",
-  "ipython >= 9.16.0",
   "base58 >= 2.1.1",
 ]
 description = "CLI toolbelt"
@@ -39,9 +34,18 @@ license = "MIT"
 name = "belt-cli"
 packages = [{ from = "src", include = "*.py" }]
 readme = "README.md"
-repository = "https://github.com/daveio/belt"
+repository = "https://github.com/synmux/belt"
 requires-python = ">=3.11, <4.0"
 version = "0.1.9"
 
 [project.scripts]
 belt = 'belt_cli:cli'
+
+[dependency-groups]
+dev = [
+  "bpython >= 0.26",
+  "ipython >= 9.16.0",
+  "poetry >= 2.4.1",
+  "poetry-plugin-shell >= 1.0.1",
+  "types-chevron >= 0.14.2.20260408",
+]

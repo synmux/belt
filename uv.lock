@@ -141,48 +141,56 @@ source = { editable = "." }
 dependencies = [
     { name = "base58" },
     { name = "betterconf" },
-    { name = "bpython" },
     { name = "chevron" },
     { name = "click" },
     { name = "colorama" },
     { name = "cryptography" },
     { name = "dnspython" },
-    { name = "ipython" },
     { name = "mutagen" },
-    { name = "poetry" },
-    { name = "poetry-plugin-shell" },
     { name = "putio-py" },
     { name = "pytz" },
     { name = "pyxdg" },
     { name = "pyyaml" },
     { name = "requests" },
     { name = "showcert" },
-    { name = "types-chevron" },
     { name = "wireguard-tools" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "bpython" },
+    { name = "ipython" },
+    { name = "poetry" },
+    { name = "poetry-plugin-shell" },
+    { name = "types-chevron" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "base58", specifier = ">=2.1.1" },
     { name = "betterconf", specifier = ">=4.5.0" },
-    { name = "bpython", specifier = ">=0.26" },
     { name = "chevron", specifier = ">=0.14.0" },
     { name = "click", specifier = ">=8.4.2" },
     { name = "colorama", specifier = ">=0.4.6" },
     { name = "cryptography", specifier = ">=50.0.0" },
     { name = "dnspython", specifier = ">=2.8.0" },
-    { name = "ipython", specifier = ">=9.16.0" },
     { name = "mutagen", specifier = ">=1.48.1" },
-    { name = "poetry", specifier = ">=2.4.1" },
-    { name = "poetry-plugin-shell", specifier = ">=1.0.1" },
     { name = "putio-py", specifier = ">=8.8.0" },
     { name = "pytz", specifier = ">=2026.3.post1" },
     { name = "pyxdg", specifier = ">=0.28" },
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "requests", specifier = ">=2.34.2" },
     { name = "showcert", specifier = ">=0.4.16" },
-    { name = "types-chevron", specifier = ">=0.14.2.20260408" },
     { name = "wireguard-tools", specifier = ">=0.6.0" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "bpython", specifier = ">=0.26" },
+    { name = "ipython", specifier = ">=9.16.0" },
+    { name = "poetry", specifier = ">=2.4.1" },
+    { name = "poetry-plugin-shell", specifier = ">=1.0.1" },
+    { name = "types-chevron", specifier = ">=0.14.2.20260408" },
 ]
 
 [[package]]
