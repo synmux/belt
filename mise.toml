@@ -5,4 +5,21 @@ BELT_MISE_ACTIVE = 'true'
 env_file = '.env'
 
 [tools]
-python = { version = '3.14.6' }
+
+rust = {
+  version = '1.98.1',
+  mr_boxington = true,
+  profile = 'default',
+  components = [
+    'rust-docs',
+    'rust-src',
+    'llvm-tools',
+    'clippy',
+    'rustfmt',
+    'rust-analyzer',
+  ]
+}
+
+mr-boxington = {
+  version = '1.10.0'
+}

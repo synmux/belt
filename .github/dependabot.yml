@@ -1,26 +1,29 @@
 version: 2
 updates:
-  # Configuration for pip
-  - package-ecosystem: pip
+  - package-ecosystem: cargo
+    cooldown:
+      default-days: 7
     directory: /
     schedule:
       interval: daily
     open-pull-requests-limit: 10
     assignees:
-      - daveio
-  # Configuration for docker
+      - synmux
   - package-ecosystem: docker
+    cooldown:
+      default-days: 7
     directory: /
     schedule:
       interval: daily
     open-pull-requests-limit: 10
     assignees:
-      - daveio
-  # Configuration for github-actions
+      - synmux
   - package-ecosystem: github-actions
+    cooldown:
+      default-days: 7
     directory: /
     schedule:
       interval: daily
     open-pull-requests-limit: 10
     assignees:
-      - daveio
+      - synmux
