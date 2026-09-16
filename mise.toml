@@ -1,3 +1,5 @@
+wrappers = { cargo = { command = "mbx", env = { MBX_CARGO_SHIM_MODE = "1" } } }
+
 [env]
 BELT_MISE_ACTIVE = 'true'
 
