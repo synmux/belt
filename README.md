@@ -43,6 +43,34 @@ GitHub Actions dependencies current.
 
 Guidance for AI coding agents lives in [`AGENTS.md`](AGENTS.md) (`CLAUDE.md` is a symlink to it).
 
+## Dependencies
+
+Mostly a way to remind myself why I've pulled something in.
+
+### `clap`, `ratatui`, `crossterm`
+
+CLI arg parsing and TUI.
+
+### `clap_complete`, `clio`
+
+Extra goo for `clap`.
+
+### `shadow-rs`
+
+Pull crate metadata into the live code.
+
+### `blake2`
+
+Generate bytes for `ur`.
+
+### `ur`
+
+Has `ur::bytewords` for the `tag` function.
+
+### `bip39`
+
+For use if `bytewords` has problems.
+
 ## Licence
 
 MIT. See [`LICENSE`](LICENSE).
