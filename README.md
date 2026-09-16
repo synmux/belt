@@ -6,8 +6,8 @@
 A CLI toolbelt, written in Rust.
 
 > **Status:** pre-alpha scaffold. The binary currently prints `Hello, world!` and nothing else.
-> `belt` is being rewritten from scratch; the earlier Python implementation was removed and is
-> not published any more.
+> `belt` is being rewritten from scratch. The earlier Python implementation lives on the
+> [`python`](https://github.com/synmux/belt/tree/python) branch and is no longer published.
 
 ## Requirements
 

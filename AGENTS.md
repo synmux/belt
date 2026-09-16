@@ -7,10 +7,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 `belt` is a Rust CLI toolbelt (crate `belt-cli`, binary `belt`). It is a ground-up rewrite of a
-previous Python package of the same name, which was removed in commit `fab35b7`. The Python version
-shipped `audio`, `crypt`, `dns`, `domain` and `tls` command groups and a YAML config at
-`~/.config/belt/config.yaml`; none of that has been ported yet. The current `src/main.rs` is a
-placeholder that prints "Hello, world!".
+previous Python package of the same name. The Python implementation is preserved on the `python`
+branch (`git show python:src/belt/...`, or `git worktree add ../belt-python python`) and is the
+reference for what to port. It shipped `audio`, `crypt`, `dns`, `domain` and `tls` command groups
+and a YAML config at `~/.config/belt/config.yaml`; none of that has been ported yet. The current
+`src/main.rs` is a placeholder that prints "Hello, world!".
 
 ## Toolchain
 
