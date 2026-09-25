@@ -10,7 +10,7 @@ repository = "https://github.com/synmux/belt"
 version = "0.0.0-pre.0"
 
 [dependencies]
-bip39 = { version = "2.2.2", features = ["serde"] }
+bip39 = { version = "3.0.0", features = ["serde"] }
 blake2 = "0.11.0"
 clap = { version = "4.6.7", features = [
   "derive",
