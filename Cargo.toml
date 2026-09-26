@@ -39,6 +39,8 @@ shadow-rs = { version = "2.0.0", features = [
   "serde_json",
   "metadata",
 ] }
+tera = { version = "2.4.0", features = ["glob_fs", "unicode", "preserve_order", "fast"] }
+tera-contrib = { version = "0.3.0", features = ["rand", "base64", "filesize_format", "format", "json", "regex", "slug", "urlencode"] }
 ur = "0.5.2"
 
 [[bin]]
