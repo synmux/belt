@@ -15,4 +15,4 @@ rust = { version = '1.98.1', mr_boxington = true, profile = 'default', component
   'rustfmt',
   'rust-analyzer',
 ] }
-mr-boxington = { version = '1.10.0' }
+mr-boxington = { version = '1.17.0' }
