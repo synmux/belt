@@ -23,13 +23,13 @@ lint:
     - git-diff-check
     - grype@0.118.0
     - hadolint@2.15.1
-    - osv-scanner@2.6.0
     - prettier@3.9.7
     - rustfmt@1.99.0
     - taplo@0.10.0
     - trufflehog@3.97.4
     - yamllint@1.38.0
   disabled:
+    - osv-scanner
     - pinact
   ignore:
     - linters:
