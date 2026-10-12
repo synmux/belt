@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="belt-command-tree-title belt-command-tree-desc" id="belt-command-tree-root">
+        <title id="belt-command-tree-title">Where belt is going</title>
+        <desc id="belt-command-tree-desc">Command tree for the belt binary: the tag command is built in Part 1, a mise helper and a decent group follow, and decent splits into chat, send and edit subcommands with an optional MQTT broker over TLS WebSockets.</desc>
+        <defs>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500;600&amp;family=Noto+Serif:ital@0;1&amp;family=Noto+Sans+KR:wght@400;500;600&amp;family=Noto+Serif+KR:wght@400&amp;family=Noto+Sans+TC:wght@400;500;600&amp;family=Noto+Serif+TC:wght@400&amp;display=swap');
+      #belt-command-tree-root { --color-paper:   #f5f5f5;
+      --color-ink:     #2d3142;
+      --color-muted:   #4f5d75;
+      --color-accent:  #bf4520;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Instrument Serif', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace; }
+      #belt-command-tree-root { font-family: var(--font-sans); color: var(--color-ink); }
+      #belt-command-tree-root .diagram-container { width: 100%; overflow-x: auto; }
+      #belt-command-tree-root .diagram-container { overflow-x: visible; }</style>
+          <marker id="belt-command-tree-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+          <marker id="belt-command-tree-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+          <marker id="belt-command-tree-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/></marker>
+        </defs>
+
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- ============ Connectors (drawn before nodes) ============ -->
+
+        <!-- belt -> tier 1 bus -->
+        <path d="M 476 152 L 476 208 L 160 208 Q 152 208 152 216 L 152 264" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 476 208 L 476 264" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 476 208 L 792 208 Q 800 208 800 216 L 800 264" fill="none" stroke="#4f5d75" stroke-width="1"/>
+
+        <!-- decent -> subcommands bus -->
+        <path d="M 800 360 L 800 424 L 568 424 Q 560 424 560 432 L 560 488" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 800 424 L 800 488" fill="none" stroke="#4f5d75" stroke-width="1"/>
+        <path d="M 800 424 L 1032 424 Q 1040 424 1040 432 L 1040 488" fill="none" stroke="#4f5d75" stroke-width="1"/>
+
+        <!-- decent -> MQTT broker (optional, dashed) -->
+        <path d="M 912 312 L 1012 312" fill="none" stroke="#4f5d75" stroke-width="1" stroke-dasharray="5,4"/>
+
+        <!-- ============ Nodes ============ -->
+
+        <!-- Root: belt (backend) -->
+        <rect x="364" y="80" width="224" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="364" y="80" width="224" height="72" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="374" y="88" width="36" height="16" rx="2" fill="none" stroke="#2d3142" stroke-opacity="0.40" stroke-width="0.8"/>
+        <text x="392" y="100" fill="#2d3142" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">BIN</text>
+        <text x="476" y="122" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">belt</text>
+        <text x="476" y="140" fill="#4f5d75" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">clap subcommands</text>
+
+        <!-- Tier 1: tag (focal) -->
+        <rect x="40" y="264" width="224" height="96" rx="6" fill="#f5f5f5"/>
+        <rect x="40" y="264" width="224" height="96" rx="6" fill="#bf4520" fill-opacity="0.08" stroke="#bf4520" stroke-width="1.2"/>
+        <rect x="50" y="272" width="36" height="16" rx="2" fill="none" stroke="#bf4520" stroke-opacity="0.50" stroke-width="0.8"/>
+        <text x="68" y="284" fill="#bf4520" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">CMD</text>
+        <text x="152" y="310" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">tag</text>
+        <text x="152" y="328" fill="#2d3142" font-size="12" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">readable hash tags</text>
+        <text x="152" y="346" fill="#bf4520" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">Part 1 · built here</text>
+
+        <!-- Tier 1: mise (backend) -->
+        <rect x="364" y="264" width="224" height="96" rx="6" fill="#f5f5f5"/>
+        <rect x="364" y="264" width="224" height="96" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="374" y="272" width="36" height="16" rx="2" fill="none" stroke="#2d3142" stroke-opacity="0.40" stroke-width="0.8"/>
+        <text x="392" y="284" fill="#2d3142" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">CMD</text>
+        <text x="476" y="310" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">mise</text>
+        <text x="476" y="328" fill="#2d3142" font-size="12" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">global mise.toml helper</text>
+        <text x="476" y="346" fill="#4f5d75" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">chezmoi-aware</text>
+
+        <!-- Tier 1: decent (backend) -->
+        <rect x="688" y="264" width="224" height="96" rx="6" fill="#f5f5f5"/>
+        <rect x="688" y="264" width="224" height="96" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <rect x="698" y="272" width="36" height="16" rx="2" fill="none" stroke="#2d3142" stroke-opacity="0.40" stroke-width="0.8"/>
+        <text x="716" y="284" fill="#2d3142" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">CMD</text>
+        <text x="800" y="310" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">decent</text>
+        <text x="800" y="328" fill="#2d3142" font-size="12" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">decentralised tools</text>
+
+        <!-- Optional: MQTT broker -->
+        <rect x="1012" y="264" width="224" height="96" rx="6" fill="#f5f5f5"/>
+        <rect x="1012" y="264" width="224" height="96" rx="6" fill="#2d3142" fill-opacity="0.02" stroke="#2d3142" stroke-opacity="0.20" stroke-width="1" stroke-dasharray="4,3"/>
+        <rect x="1022" y="272" width="52" height="16" rx="2" fill="none" stroke="#2d3142" stroke-opacity="0.30" stroke-width="0.8"/>
+        <text x="1048" y="284" fill="#4f5d75" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">INFRA</text>
+        <text x="1124" y="310" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">MQTT broker</text>
+        <text x="1124" y="328" fill="#2d3142" font-size="12" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">optional, async</text>
+        <text x="1124" y="346" fill="#4f5d75" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">TLS over WebSockets</text>
+
+        <!-- Tier 2: chat (leaf) -->
+        <rect x="460" y="488" width="200" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="460" y="488" width="200" height="72" rx="6" fill="#2d3142" fill-opacity="0.05" stroke="#4f5d75" stroke-width="0.8"/>
+        <rect x="470" y="496" width="36" height="16" rx="2" fill="none" stroke="#4f5d75" stroke-opacity="0.40" stroke-width="0.8"/>
+        <text x="488" y="508" fill="#4f5d75" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">SUB</text>
+        <text x="560" y="530" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">chat</text>
+        <text x="560" y="548" fill="#4f5d75" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">kex + wrapper key</text>
+
+        <!-- Tier 2: send (leaf) -->
+        <rect x="700" y="488" width="200" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="700" y="488" width="200" height="72" rx="6" fill="#2d3142" fill-opacity="0.05" stroke="#4f5d75" stroke-width="0.8"/>
+        <rect x="710" y="496" width="36" height="16" rx="2" fill="none" stroke="#4f5d75" stroke-opacity="0.40" stroke-width="0.8"/>
+        <text x="728" y="508" fill="#4f5d75" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">SUB</text>
+        <text x="800" y="530" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">send</text>
+        <text x="800" y="548" fill="#4f5d75" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">wormhole-style</text>
+
+        <!-- Tier 2: edit (leaf) -->
+        <rect x="940" y="488" width="200" height="72" rx="6" fill="#f5f5f5"/>
+        <rect x="940" y="488" width="200" height="72" rx="6" fill="#2d3142" fill-opacity="0.05" stroke="#4f5d75" stroke-width="0.8"/>
+        <rect x="950" y="496" width="36" height="16" rx="2" fill="none" stroke="#4f5d75" stroke-opacity="0.40" stroke-width="0.8"/>
+        <text x="968" y="508" fill="#4f5d75" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle" letter-spacing="0.08em">SUB</text>
+        <text x="1040" y="530" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', system-ui, sans-serif" text-anchor="middle">edit</text>
+        <text x="1040" y="548" fill="#4f5d75" font-size="12" font-family="'Geist Mono', ui-monospace, monospace" text-anchor="middle">CRDT sync</text>
+
+        <!-- ============ Legend strip ============ -->
+        <line x1="40" y1="660" x2="1240" y2="660" stroke="#2d3142" stroke-opacity="0.10" stroke-width="0.8"/>
+        <text x="40" y="696" fill="#4f5d75" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.14em">LEGEND</text>
+
+        <rect x="160" y="684" width="24" height="16" rx="3" fill="#bf4520" fill-opacity="0.08" stroke="#bf4520" stroke-width="1.2"/>
+        <text x="196" y="696" fill="#bf4520" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.08em">BUILT IN PART 1</text>
+
+        <rect x="368" y="684" width="24" height="16" rx="3" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+        <text x="404" y="696" fill="#4f5d75" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.08em">BINARY / COMMAND</text>
+
+        <rect x="584" y="684" width="24" height="16" rx="3" fill="#2d3142" fill-opacity="0.05" stroke="#4f5d75" stroke-width="0.8"/>
+        <text x="620" y="696" fill="#4f5d75" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.08em">SUBCOMMAND</text>
+
+        <rect x="752" y="684" width="24" height="16" rx="3" fill="#2d3142" fill-opacity="0.02" stroke="#2d3142" stroke-opacity="0.20" stroke-width="1" stroke-dasharray="4,3"/>
+        <text x="788" y="696" fill="#4f5d75" font-size="11" font-family="'Geist Mono', ui-monospace, monospace" letter-spacing="0.08em">OPTIONAL</text>
+      </svg>
