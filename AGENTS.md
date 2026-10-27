@@ -15,8 +15,9 @@ and a YAML config at `~/.config/belt/config.yaml`; none of that has been ported 
 
 ## Toolchain
 
-- Rust `1.98.1` is pinned in `mise.toml`, `Dockerfile` and `.github/workflows/ci.yml`. Bump all
-  three together.
+- Rust `1.99.1` is pinned in `mise.toml` (the source of truth), `Dockerfile`,
+  `.github/workflows/ci.yml` and the `clippy`/`rustfmt` entries in `.trunk/trunk.yaml`. Bump all
+  four together.
 - Edition `2024` in `Cargo.toml`. Note that `.trunk/configs/.rustfmt.toml` says `edition = "2021"`;
   trunk's rustfmt run uses that file, while `cargo fmt` reads `Cargo.toml`. Prefer `cargo fmt`.
 - `mise` manages the toolchain (`mise install`). It also sets `BELT_MISE_ACTIVE=true` and loads
@@ -58,7 +59,7 @@ Nothing uses these yet; they are pre-wired for the port.
 
 - `src/main.rs` is the only source file. Cargo.toml declares a single `[[bin]]` named `belt` at that
   path, with `default-run = "belt"`.
-- `Dockerfile` is a two-stage build (`rust:1.98.1-slim-bookworm` then `debian:bookworm-slim`)
+- `Dockerfile` is a two-stage build (`rust:1.99.1-slim-bookworm` then `debian:bookworm-slim`)
   running as UID 10001. It copies only `Cargo.toml`, `Cargo.lock` and `src/`, so any new top-level
   directory the build needs must be added there and removed from `.dockerignore`. The `apt`
   package versions are pinned; `hadolint` requires that.

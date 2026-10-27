@@ -1,6 +1,6 @@
 # belt: project overview (as of 2026-10-13)
 
-- Rust CLI toolbelt, crate `belt-cli`, binary `belt`, edition 2024, Rust 1.99.0 pinned in `mise.toml`, `Dockerfile`, and CI.
+- Rust CLI toolbelt, crate `belt-cli`, binary `belt`, edition 2024, Rust 1.99.1 pinned in `mise.toml`, `Dockerfile`, and CI.
 - Ground-up rewrite of the Python package. The old Python implementation is preserved on the `python` branch (local and `origin/python`); use it as the porting reference. It had `audio`, `crypt`, `dns`, `domain`, `tls` command groups and config at `~/.config/belt/config.yaml`. Nothing ported yet; `src/main.rs` is Hello World.
 - Pre-wired deps: `clap` (derive), `ratatui`, `crossterm` (osc52). Unused so far.
 - Canonical agent guidance is `AGENTS.md`; `CLAUDE.md` is a symlink to it. `README.md` is boilerplate.

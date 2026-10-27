@@ -12,7 +12,7 @@ Right now the `belt` binary does one thing: `println!("Hello, world!")`. By the 
 
 ## Prerequisites
 
-- A clone of the repo with `mise install` done, so `cargo --version` reports `1.99.0`. This part is written against **Rust 1.99.0** and **edition 2024**; the clippy lint it mentions later did not exist in older toolchains.
+- A clone of the repo with `mise install` done, so `cargo --version` reports `1.99.1`. This part is written against **Rust 1.99.1** and **edition 2024**; the clippy lint it mentions later did not exist in older toolchains.
 - Working knowledge of Python or Ruby. Where Rust does something the same way, this part says so and moves on.
 - No Rust at all. Terms are defined the first time they appear.
 
@@ -273,7 +273,7 @@ keys-item-also-yell
 
 The three test lines may come out in a different order; `cargo test` runs tests on several threads. `/dev/null` and `printf '' | belt tag -` give the same tag because both are zero bytes long, and a hash function does not know or care where its zero bytes came from.
 
-`cargo fmt` and `cargo clippy` should both pass silently. Clippy is the one to watch over time: its lints change with the toolchain, and CI runs the pinned 1.99.0 with `-D warnings`, so a suggestion that is advisory on your machine is a build failure in CI if the versions drift. An earlier draft of `words_for_bytes` used `chunks_exact(2)` and 1.99 rejected it with [`chunks_exact_to_as_chunks`](https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks). Run clippy locally before you push.
+`cargo fmt` and `cargo clippy` should both pass silently. Clippy is the one to watch over time: its lints change with the toolchain, and CI runs the pinned 1.99.1 with `-D warnings`, so a suggestion that is advisory on your machine is a build failure in CI if the versions drift. An earlier draft of `words_for_bytes` used `chunks_exact(2)` and 1.99 rejected it with [`chunks_exact_to_as_chunks`](https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks). Run clippy locally before you push.
 
 **Likely errors:**
 

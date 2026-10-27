@@ -1,4 +1,4 @@
-FROM rust:1.99.0-slim-bookworm AS builder
+FROM rust:1.99.1-slim-bookworm AS builder
 
 WORKDIR /app
 
@@ -12,7 +12,7 @@ FROM debian:bookworm-slim AS runtime
 HEALTHCHECK NONE
 
 RUN apt-get update \
-  && apt-get install --no-install-recommends -y ca-certificates=20250419~deb12u1 libgcc-s1=12.2.0-14+deb12u1 \
+  && apt-get install --no-install-recommends -y ca-certificates=20250419~deb12u2 libgcc-s1=12.2.0-14+deb12u1 \
   && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/target/release/belt /usr/local/bin/belt

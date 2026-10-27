@@ -11,7 +11,7 @@ A CLI toolbelt, written in Rust.
 
 ## Requirements
 
-- Rust `1.98.1` (pinned in [`mise.toml`](mise.toml); `mise install` will fetch it)
+- Rust `1.99.1` (pinned in [`mise.toml`](mise.toml); `mise install` will fetch it)
 - Optionally [`trunk`](https://docs.trunk.io/cli) for the full lint suite
 - Optionally Docker for the container build
 

@@ -22,12 +22,12 @@ lint:
     - svgo@4.1.0
     - actionlint@1.7.12
     - checkov@3.3.30
-    - clippy@1.99.0
+    - clippy@1.99.1
     - git-diff-check
     - grype@0.121.0
     - hadolint@2.15.1
     - prettier@3.9.10
-    - rustfmt@1.99.0
+    - rustfmt@1.99.1
     - taplo@0.10.0
     - trufflehog@3.99.7
     - yamllint@1.38.0
