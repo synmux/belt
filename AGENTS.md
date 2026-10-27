@@ -18,8 +18,6 @@ and a YAML config at `~/.config/belt/config.yaml`; none of that has been ported 
 - Rust `1.99.1` is pinned in `mise.toml` (the source of truth), `Dockerfile`,
   `.github/workflows/ci.yml` and the `clippy`/`rustfmt` entries in `.trunk/trunk.yaml`. Bump all
   four together.
-- Edition `2024` in `Cargo.toml`. Note that `.trunk/configs/.rustfmt.toml` says `edition = "2021"`;
-  trunk's rustfmt run uses that file, while `cargo fmt` reads `Cargo.toml`. Prefer `cargo fmt`.
 - `mise` manages the toolchain (`mise install`). It also sets `BELT_MISE_ACTIVE=true` and loads
   `.env` if present.
 - `trunk` runs the linters listed in `.trunk/trunk.yaml` and installs `trunk-fmt-pre-commit` and
