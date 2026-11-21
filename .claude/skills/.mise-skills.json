@@ -1,5 +1,6 @@
 {
   "links": {
-    "mbx": "/Users/syn/.local/share/mise/installs/mr-boxington/1.22.0/.mise-packslip/repo/skills/mbx"
+    "aube": "/Users/syn/.local/share/mise/installs/aube/2.10.0/.mise-packslip/repo/skills/aube",
+    "mbx": "/Users/syn/.local/share/mise/installs/mr-boxington/1.30.0/.mise-packslip/repo/skills/mbx"
   }
 }
