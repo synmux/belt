@@ -10,14 +10,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 previous Python package of the same name. The Python implementation is preserved on the `python`
 branch (`git show python:src/belt/...`, or `git worktree add ../belt-python python`) and is the
 reference for what to port. It shipped `audio`, `crypt`, `dns`, `domain` and `tls` command groups
-and a YAML config at `~/.config/belt/config.yaml`; none of that has been ported yet. The current
-`src/main.rs` is a placeholder that prints "Hello, world!".
+and a YAML config at `~/.config/belt/config.yaml`; none of that has been ported yet.
+
+Bare `belt` shows help and exits successfully (also the Docker smoke test). `belt pw [MIN_LENGTH]`
+prints a single four-word password and a newline to stdout. Its minimum is exclusive: the default
+of 16 requires at least 17 characters, and a non-negative argument replaces the default. Keep
+warnings, retry notices and errors on stderr; never log a rejected password.
 
 ## Toolchain
 
-- Rust `1.99.1` is pinned in `mise.toml` (the source of truth), `Dockerfile`,
-  `.github/workflows/ci.yml` and the `clippy`/`rustfmt` entries in `.trunk/trunk.yaml`. Bump all
-  four together.
+- `mise.toml` pins the local Rust version. Bump it together with `Dockerfile`, `.github/workflows/ci.yml`
+  and the `clippy`/`rustfmt` entries in `.trunk/trunk.yaml`.
 - `mise` manages the toolchain (`mise install`). It also sets `BELT_MISE_ACTIVE=true` and loads
   `.env` if present.
 - `trunk` runs the linters listed in `.trunk/trunk.yaml` and installs `trunk-fmt-pre-commit` and
@@ -48,16 +51,16 @@ than suppressing them.
 ## Dependencies already in `Cargo.toml`
 
 - `clap` with `derive`, `env`, `suggestions`, `wrap_help` and colour features. Use the derive API.
-- `ratatui` and `crossterm` for any TUI surface. `crossterm` has `osc52` enabled for clipboard
+- `bip39` supplies the English dictionary for `pw`; `rand` supplies its OS-seeded cryptographic RNG.
+- `ratatui` and `crossterm` are pre-wired for any future TUI. `crossterm` has `osc52` enabled for clipboard
   writes over the terminal.
-
-Nothing uses these yet; they are pre-wired for the port.
 
 ## Layout
 
-- `src/main.rs` is the only source file. Cargo.toml declares a single `[[bin]]` named `belt` at that
-  path, with `default-run = "belt"`.
-- `Dockerfile` is a two-stage build (`rust:1.99.1-slim-bookworm` then `debian:bookworm-slim`)
+- `src/main.rs` parses and dispatches commands for the single `belt` binary (`default-run = "belt"`).
+- `src/pw.rs` handles password generation, including the dictionary-derived entropy thresholds and
+  retry loop. Its unit tests sit alongside it; `tests/pw_cli.rs` checks process status and both streams.
+- `Dockerfile` is a two-stage build (a slim Bookworm Rust builder then `debian:bookworm-slim`)
   running as UID 10001. It copies only `Cargo.toml`, `Cargo.lock` and `src/`, so any new top-level
   directory the build needs must be added there and removed from `.dockerignore`. The `apt`
   package versions are pinned; `hadolint` requires that.
