@@ -117,10 +117,13 @@ where
                 ),
             ));
         }
-        LengthPolicy::Warn => writeln!(
-            diagnostics,
-            "Warning: a minimum length of {min_length} significantly restricts password entropy."
-        )?,
+        // Diagnostics are best-effort: a broken stderr must not withhold the password.
+        LengthPolicy::Warn => {
+            let _ = writeln!(
+                diagnostics,
+                "Warning: a minimum length of {min_length} significantly restricts password entropy."
+            );
+        }
         LengthPolicy::Allow => {}
     }
 
@@ -130,7 +133,7 @@ where
         if candidate.len() > min_length {
             return Ok(candidate);
         }
-        writeln!(diagnostics, "Password was too short; regenerating.")?;
+        let _ = writeln!(diagnostics, "Password was too short; regenerating.");
     }
 }
 
@@ -220,6 +223,31 @@ mod tests {
             assert!(notice.contains("too short") && notice.contains("regenerating"));
         }
         assert_eq!(lines.next(), None);
+    }
+
+    struct BrokenWriter;
+
+    impl Write for BrokenWriter {
+        fn write(&mut self, _buffer: &[u8]) -> io::Result<usize> {
+            Err(io::Error::from(io::ErrorKind::BrokenPipe))
+        }
+
+        fn flush(&mut self) -> io::Result<()> {
+            Err(io::Error::from(io::ErrorKind::BrokenPipe))
+        }
+    }
+
+    #[test]
+    fn failed_diagnostic_writes_do_not_withhold_the_password() {
+        let minimum = 26;
+        let equal = "x".repeat(minimum);
+        let above = "y".repeat(minimum + 1);
+        let mut candidates = [equal, above.clone()].into_iter();
+        let password = generate_with(minimum, &mut BrokenWriter, || {
+            Ok(move || candidates.next().unwrap())
+        })
+        .unwrap();
+        assert_eq!(password, above);
     }
 
     #[test]
