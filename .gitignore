@@ -180,3 +180,8 @@ http-client.private.env.json
 # Added by cargo
 
 /target
+
+# Agent session state
+.awb/
+.junie/plans/
+copilot-memories.jsonl
