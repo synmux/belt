@@ -23,18 +23,26 @@ enum Command {
     },
 }
 
-fn run() -> io::Result<()> {
-    match Cli::parse().command {
+fn run(
+    command: Option<Command>,
+    output: &mut impl Write,
+    generate_password: impl FnOnce(usize) -> io::Result<String>,
+) -> io::Result<()> {
+    match command {
         Some(Command::Pw { min_length }) => {
-            let password = pw::generate_password(min_length, &mut io::stderr().lock())?;
-            writeln!(io::stdout().lock(), "{password}")
+            let password = generate_password(min_length)?;
+            writeln!(output, "{password}")
         }
         None => Cli::command().print_help(),
     }
 }
 
 fn main() -> ExitCode {
-    match run() {
+    let command = Cli::parse().command;
+    let result = run(command, &mut io::stdout().lock(), |min_length| {
+        pw::generate_password(min_length, &mut io::stderr().lock())
+    });
+    match result {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
             let _ = writeln!(io::stderr().lock(), "error: {error}");
@@ -48,8 +56,26 @@ mod tests {
     use super::*;
 
     #[test]
-    fn smaller_positional_value_replaces_the_default() {
-        let cli = Cli::try_parse_from(["belt", "pw", "8"]).unwrap();
-        assert!(matches!(cli.command, Some(Command::Pw { min_length: 8 })));
+    fn positional_value_including_zero_reaches_the_generator_in_place_of_the_default() {
+        for (arguments, expected_minimum) in [
+            (&["belt", "pw"][..], 16),
+            (&["belt", "pw", "8"][..], 8),
+            (&["belt", "pw", "0"][..], 0),
+        ] {
+            let command = Cli::try_parse_from(arguments).unwrap().command;
+            let mut requested_minimum = None;
+            let mut output = Vec::new();
+            run(command, &mut output, |min_length| {
+                requested_minimum = Some(min_length);
+                Ok("generated".to_owned())
+            })
+            .unwrap();
+            assert_eq!(
+                requested_minimum,
+                Some(expected_minimum),
+                "arguments: {arguments:?}"
+            );
+            assert_eq!(output, b"generated\n");
+        }
     }
 }

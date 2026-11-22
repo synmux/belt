@@ -16,7 +16,7 @@ For each candidate at or below the requested length, report on stderr that it wa
 
 ### Command and generator
 
-Follow the `Cli` / `Command` derive-and-dispatch pattern in `docs/getting-started/part-01.md`. Parse `Command::Pw { min_length: usize }` with a default of `16`. A bare `belt` prints top-level help successfully, preserving the existing no-argument Docker smoke run without generating a password.
+Follow the `Cli` / `Command` derive-and-dispatch pattern in `docs/learning/part-01.md`. Parse `Command::Pw { min_length: usize }` with a default of `16`. A bare `belt` prints top-level help successfully, preserving the existing no-argument Docker smoke run without generating a password.
 
 Use `bip39::Language::English.word_list()` directly: the BIP32 references mean the same BIP39 dictionary, not a wallet mnemonic or checksum. For each candidate, draw four uniform word indices with replacement. Draw the uppercase count uniformly from `1..=3`, then select that many distinct positions uniformly. Choose uniformly among the six three-gap digit/symbol patterns containing both types; draw each joiner uniformly from its alphabet.
 

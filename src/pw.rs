@@ -2,7 +2,7 @@ use std::io::{self, Write};
 
 use bip39::Language;
 use rand::{
-    CryptoRng, RngExt, SeedableRng,
+    CryptoRng, RngExt, SeedableRng, TryCryptoRng,
     rngs::{StdRng, SysRng},
     seq::SliceRandom,
 };
@@ -90,8 +90,18 @@ fn length_policy(min_length: usize) -> LengthPolicy {
 }
 
 pub fn generate_password(min_length: usize, diagnostics: &mut impl Write) -> io::Result<String> {
+    generate_seeded(min_length, diagnostics, &mut SysRng)
+}
+
+/// Seeds the generator from `entropy`. A seeding failure is returned as an error; there is no
+/// fallback to a weaker source.
+fn generate_seeded<Entropy: TryCryptoRng + ?Sized>(
+    min_length: usize,
+    diagnostics: &mut impl Write,
+    entropy: &mut Entropy,
+) -> io::Result<String> {
     generate_with(min_length, diagnostics, || {
-        let mut rng = StdRng::try_from_rng(&mut SysRng).map_err(|error| {
+        let mut rng = StdRng::try_from_rng(entropy).map_err(|error| {
             io::Error::other(format!(
                 "could not seed the password generator from the operating system: {error}"
             ))
@@ -139,6 +149,8 @@ where
 
 #[cfg(test)]
 mod tests {
+    use rand::TryRng;
+
     use super::*;
 
     #[test]
@@ -183,14 +195,34 @@ mod tests {
         assert!(diagnostics.is_empty());
     }
 
+    struct NoEntropy;
+
+    impl TryRng for NoEntropy {
+        type Error = io::Error;
+
+        fn try_next_u32(&mut self) -> Result<u32, Self::Error> {
+            Err(io::Error::other("no OS entropy"))
+        }
+
+        fn try_next_u64(&mut self) -> Result<u64, Self::Error> {
+            Err(io::Error::other("no OS entropy"))
+        }
+
+        fn try_fill_bytes(&mut self, _destination: &mut [u8]) -> Result<(), Self::Error> {
+            Err(io::Error::other("no OS entropy"))
+        }
+    }
+
+    impl TryCryptoRng for NoEntropy {}
+
     #[test]
     fn propagates_seed_failure_without_a_fallback() {
         let mut diagnostics = Vec::new();
-        let error = generate_with(25, &mut diagnostics, || -> io::Result<fn() -> String> {
-            Err(io::Error::other("no OS entropy"))
-        })
-        .unwrap_err();
-        assert_eq!(error.to_string(), "no OS entropy");
+        let error = generate_seeded(25, &mut diagnostics, &mut NoEntropy).unwrap_err();
+        assert_eq!(
+            error.to_string(),
+            "could not seed the password generator from the operating system: no OS entropy"
+        );
         assert!(diagnostics.is_empty());
     }
 

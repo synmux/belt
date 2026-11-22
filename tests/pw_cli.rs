@@ -34,8 +34,9 @@ fn default_prints_only_one_password_longer_than_sixteen() {
     assert!(diagnostics.lines().all(|line| line == RETRY_NOTICE));
 }
 
+// The unit tests in `src/main.rs` check that zero reaches the generator; this checks the process.
 #[test]
-fn accepts_zero_in_place_of_the_default() {
+fn zero_minimum_prints_a_password_without_diagnostics() {
     let output = belt(&["pw", "0"]);
     assert_password(&output, 0);
     assert!(output.stderr.is_empty());
