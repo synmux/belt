@@ -140,6 +140,7 @@ dependencies = [
  "clap_mangen",
  "clio",
  "crossterm 0.29.0",
+ "rand 0.10.3",
  "ratatui",
  "shadow-rs",
  "tera",
