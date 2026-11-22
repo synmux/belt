@@ -1,7 +1,3 @@
----
-sessionId: session-261122-211657-1nht
----
-
 # Requirements
 
 `belt pw [MIN_LENGTH]` prints one password followed by a newline. The password must be **strictly longer** than `MIN_LENGTH`: the default `16` requires at least 17 characters. An explicit non-negative integer replaces the default, even below 16. `belt pw --help` explains this distinction and shows the default.
@@ -16,7 +12,7 @@ Each password contains four independently drawn English BIP39 words; repeats are
 
 For each candidate at or below the requested length, report on stderr that it was too short and is being regenerated. Never include the rejected password in a diagnostic. On success, stdout contains only the accepted password; on failure it stays empty.
 
-# Technical Design
+## Technical Design
 
 ### Command and generator
 
@@ -55,7 +51,7 @@ graph LR
 - `tests/pw_cli.rs` (new): exercise the binary and capture its streams separately.
 - `README.md`, `AGENTS.md`: replace the scaffold-only description and document the command; edit the canonical guide, not the `CLAUDE.md` symlink.
 
-# Testing
+## Testing
 
 - Verify candidate structure: four dictionary members after case normalisation; one to three wholly uppercase positions; exactly three permitted joiners containing both types. Do not use statistical frequency assertions as evidence of security.
 - Check histogram totals against `2048⁴` and classify `25`, `26`, `28`, `29`, `32` and `usize::MAX`. A refused request must not reach the generator.
@@ -63,7 +59,7 @@ graph LR
 - Run the binary for the default, a shorter override, a warned request, refusal, malformed input and `pw --help`. Check status, stdout and stderr independently; allow retry notices on valid requests. Verify bare `belt` still exits successfully.
 - Run the repository’s formatting check, locked Clippy with `-D warnings`, locked tests and locked release build.
 
-# Delivery Steps
+## Delivery Steps
 
 ### ✓ Step 1: Generate secure four-word candidates
 
