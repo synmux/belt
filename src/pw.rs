@@ -9,46 +9,6 @@ use rand::{
 
 const WORD_COUNT: usize = 4;
 
-pub fn write_evaluation(password: &str, diagnostics: &mut impl Write) -> io::Result<()> {
-    let evaluation = zxcvbn::zxcvbn(password, &[]);
-    let crack_times = evaluation.crack_times();
-    writeln!(
-        diagnostics,
-        "\nzxcvbn password evaluation (estimates, not guarantees):"
-    )?;
-    writeln!(diagnostics, "  Score: {}/4", evaluation.score())?;
-    writeln!(diagnostics, "  Estimated guesses: {}", evaluation.guesses())?;
-    writeln!(diagnostics, "  Estimated crack times:")?;
-    for (scenario, duration) in [
-        (
-            "Online, throttled (100 guesses/hour)",
-            crack_times.online_throttling_100_per_hour(),
-        ),
-        (
-            "Online, unthrottled (10 guesses/second)",
-            crack_times.online_no_throttling_10_per_second(),
-        ),
-        (
-            "Offline, slow hashing (10,000 guesses/second)",
-            crack_times.offline_slow_hashing_1e4_per_second(),
-        ),
-        (
-            "Offline, fast hashing (10 billion guesses/second)",
-            crack_times.offline_fast_hashing_1e10_per_second(),
-        ),
-    ] {
-        writeln!(diagnostics, "    {scenario}: {duration}")?;
-    }
-    if let Some(feedback) = evaluation.feedback() {
-        if let Some(warning) = feedback.warning() {
-            writeln!(diagnostics, "  Warning: {warning}")?;
-        }
-        for suggestion in feedback.suggestions() {
-            writeln!(diagnostics, "  Suggestion: {suggestion}")?;
-        }
-    }
-    Ok(())
-}
 const GAP_COUNT: usize = WORD_COUNT - 1;
 const DIGITS: &[u8] = b"0123456789";
 const SYMBOLS: &[u8] = b"&+.,/-=?@#^%";
@@ -185,6 +145,47 @@ where
             return Ok(candidate);
         }
     }
+}
+
+pub fn write_evaluation(password: &str, diagnostics: &mut impl Write) -> io::Result<()> {
+    let evaluation = zxcvbn::zxcvbn(password, &[]);
+    let crack_times = evaluation.crack_times();
+    writeln!(
+        diagnostics,
+        "\nzxcvbn password evaluation (estimates, not guarantees):"
+    )?;
+    writeln!(diagnostics, "  Score: {}/4", evaluation.score())?;
+    writeln!(diagnostics, "  Estimated guesses: {}", evaluation.guesses())?;
+    writeln!(diagnostics, "  Estimated crack times:")?;
+    for (scenario, duration) in [
+        (
+            "Online, throttled (100 guesses/hour)",
+            crack_times.online_throttling_100_per_hour(),
+        ),
+        (
+            "Online, unthrottled (10 guesses/second)",
+            crack_times.online_no_throttling_10_per_second(),
+        ),
+        (
+            "Offline, slow hashing (10,000 guesses/second)",
+            crack_times.offline_slow_hashing_1e4_per_second(),
+        ),
+        (
+            "Offline, fast hashing (10 billion guesses/second)",
+            crack_times.offline_fast_hashing_1e10_per_second(),
+        ),
+    ] {
+        writeln!(diagnostics, "    {scenario}: {duration}")?;
+    }
+    if let Some(feedback) = evaluation.feedback() {
+        if let Some(warning) = feedback.warning() {
+            writeln!(diagnostics, "  Warning: {warning}")?;
+        }
+        for suggestion in feedback.suggestions() {
+            writeln!(diagnostics, "  Suggestion: {suggestion}")?;
+        }
+    }
+    Ok(())
 }
 
 #[cfg(test)]

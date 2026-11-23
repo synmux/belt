@@ -33,10 +33,10 @@ Running `belt` without arguments shows the available commands. Use `belt pw [MIN
 one password followed by a newline. The password must be **strictly longer** than `MIN_LENGTH`:
 
 ```shell
-belt pw           # Default: longer than 16 characters (at least 17)
-belt pw 12        # Override: longer than 12 characters (at least 13)
+belt pw            # Default: longer than 16 characters (at least 17)
+belt pw 12         # Override: longer than 12 characters (at least 13)
 belt pw --no-score # Disable the password evaluation
-belt pw --help    # Show usage without generating a password
+belt pw --help     # Show usage without generating a password
 ```
 
 Each password uses four words drawn independently from the English BIP39 dictionary; words may
