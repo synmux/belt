@@ -12,7 +12,7 @@ version = "0.0.0-pre.0"
 [dependencies]
 bip39 = { version = "3.0.0", features = ["serde"] }
 blake2 = "0.11.0"
-clap = { version = "4.6.7", features = [
+clap = { version = "4.6.9", features = [
   "derive",
   "env",
   "unicode",
@@ -24,10 +24,10 @@ clap = { version = "4.6.7", features = [
   "usage",
   "color",
 ] }
-clap_complete = "4.6.11"
+clap_complete = "4.6.12"
 clio = { version = "0.3.5", features = ["clap", "clap-parse"] }
 crossterm = { version = "0.29.0", features = ["serde", "osc52"] }
-rand = { version = "0.10.3", default-features = false, features = [
+rand = { version = "0.10.4", default-features = false, features = [
   "std_rng",
   "sys_rng",
   "unbiased",
@@ -67,4 +67,4 @@ name = "belt"
 path = "src/main.rs"
 
 [build-dependencies]
-clap_mangen = "0.3.3"
+clap_mangen = "0.3.4"
