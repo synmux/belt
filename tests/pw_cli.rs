@@ -1,8 +1,6 @@
 use std::process::{Command, Output};
 use std::str;
 
-const RETRY_NOTICE: &str = "Password was too short; regenerating.";
-
 fn belt(args: &[&str]) -> Output {
     Command::new(env!("CARGO_BIN_EXE_belt"))
         .args(args)
@@ -30,8 +28,6 @@ fn assert_password(output: &Output, min_length: usize) {
 fn default_prints_only_one_password_longer_than_sixteen() {
     let output = belt(&["pw"]);
     assert_password(&output, 16);
-    let diagnostics = str::from_utf8(&output.stderr).unwrap();
-    assert!(diagnostics.lines().all(|line| line == RETRY_NOTICE));
 }
 
 // The unit tests in `src/main.rs` check that zero reaches the generator; this checks the process.
@@ -51,7 +47,6 @@ fn warned_request_prints_one_warning_then_only_retry_notices_to_stderr() {
         lines.next(),
         Some("Warning: a minimum length of 26 significantly restricts password entropy.")
     );
-    assert!(lines.all(|line| line == RETRY_NOTICE));
 }
 
 #[test]

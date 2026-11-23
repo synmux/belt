@@ -123,7 +123,7 @@ where
             return Err(io::Error::new(
                 io::ErrorKind::InvalidInput,
                 format!(
-                    "refusing to generate a password: a minimum length of {min_length} rejects more than 95% of all four-word combinations"
+                    "refusing to generate a password: a minimum length of {min_length} rejects more than 95% of all four-word combinations, which leaves you with terrible password entropy. It'll be more secure with fewer characters. Ironically enough."
                 ),
             ));
         }
@@ -143,7 +143,6 @@ where
         if candidate.len() > min_length {
             return Ok(candidate);
         }
-        let _ = writeln!(diagnostics, "Password was too short; regenerating.");
     }
 }
 
@@ -250,10 +249,6 @@ mod tests {
                 .unwrap()
                 .contains("significantly restricts password entropy")
         );
-        for _ in 0..2 {
-            let notice = lines.next().unwrap();
-            assert!(notice.contains("too short") && notice.contains("regenerating"));
-        }
         assert_eq!(lines.next(), None);
     }
 
