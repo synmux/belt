@@ -28,25 +28,31 @@ fn assert_password(output: &Output, min_length: usize) {
 fn default_prints_only_one_password_longer_than_sixteen() {
     let output = belt(&["pw"]);
     assert_password(&output, 16);
+    let diagnostics = str::from_utf8(&output.stderr).unwrap();
+    assert!(diagnostics.starts_with("\nzxcvbn password evaluation"));
+    assert!(diagnostics.contains("Score:") && diagnostics.contains("/4"));
+    assert!(diagnostics.contains("Estimated guesses:"));
+    assert!(diagnostics.contains("Estimated crack times:"));
 }
 
 // The unit tests in `src/main.rs` check that zero reaches the generator; this checks the process.
 #[test]
 fn zero_minimum_prints_a_password_without_diagnostics() {
-    let output = belt(&["pw", "0"]);
+    let output = belt(&["pw", "0", "--no-score"]);
     assert_password(&output, 0);
     assert!(output.stderr.is_empty());
 }
 
 #[test]
-fn warned_request_prints_one_warning_then_only_retry_notices_to_stderr() {
-    let output = belt(&["pw", "26"]);
+fn no_score_preserves_entropy_warnings() {
+    let output = belt(&["pw", "26", "--no-score"]);
     assert_password(&output, 26);
     let mut lines = str::from_utf8(&output.stderr).unwrap().lines();
     assert_eq!(
         lines.next(),
         Some("Warning: a minimum length of 26 significantly restricts password entropy.")
     );
+    assert_eq!(lines.next(), None);
 }
 
 #[test]
@@ -75,7 +81,8 @@ fn pw_help_explains_the_exclusive_default() {
     assert!(output.status.success());
     assert!(output.stderr.is_empty());
     let help = str::from_utf8(&output.stdout).unwrap();
-    assert!(help.contains("belt pw [MIN_LENGTH]"));
+    assert!(help.contains("belt pw [OPTIONS] [MIN_LENGTH]"));
+    assert!(help.contains("--no-score"));
     assert!(help.contains("strictly longer"));
     assert!(help.contains("[default: 16]"));
 }

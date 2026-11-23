@@ -20,18 +20,30 @@ enum Command {
         /// The default gives at least 17 characters; smaller values are allowed.
         #[arg(default_value_t = 16)]
         min_length: usize,
+        /// Disable the zxcvbn password evaluation on stderr.
+        #[arg(long)]
+        no_score: bool,
     },
 }
 
 fn run(
     command: Option<Command>,
     output: &mut impl Write,
+    diagnostics: &mut impl Write,
     generate_password: impl FnOnce(usize) -> io::Result<String>,
 ) -> io::Result<()> {
     match command {
-        Some(Command::Pw { min_length }) => {
+        Some(Command::Pw {
+            min_length,
+            no_score,
+        }) => {
             let password = generate_password(min_length)?;
-            writeln!(output, "{password}")
+            writeln!(output, "{password}")?;
+            output.flush()?;
+            if !no_score {
+                pw::write_evaluation(&password, diagnostics)?;
+            }
+            Ok(())
         }
         None => Cli::command().print_help(),
     }
@@ -39,9 +51,12 @@ fn run(
 
 fn main() -> ExitCode {
     let command = Cli::parse().command;
-    let result = run(command, &mut io::stdout().lock(), |min_length| {
-        pw::generate_password(min_length, &mut io::stderr().lock())
-    });
+    let result = run(
+        command,
+        &mut io::stdout().lock(),
+        &mut io::stderr(),
+        |min_length| pw::generate_password(min_length, &mut io::stderr().lock()),
+    );
     match result {
         Ok(()) => ExitCode::SUCCESS,
         Err(error) => {
@@ -65,7 +80,7 @@ mod tests {
             let command = Cli::try_parse_from(arguments).unwrap().command;
             let mut requested_minimum = None;
             let mut output = Vec::new();
-            run(command, &mut output, |min_length| {
+            run(command, &mut output, &mut Vec::new(), |min_length| {
                 requested_minimum = Some(min_length);
                 Ok("generated".to_owned())
             })

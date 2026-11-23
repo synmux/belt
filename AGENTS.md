@@ -15,7 +15,9 @@ and a YAML config at `~/.config/belt/config.yaml`; none of that has been ported 
 Bare `belt` shows help and exits successfully (also the Docker smoke test). `belt pw [MIN_LENGTH]`
 prints a single four-word password and a newline to stdout. Its minimum is exclusive: the default
 of 16 requires at least 17 characters, and a non-negative argument replaces the default. Keep
-warnings, retry notices and errors on stderr; never log a rejected password.
+warnings and errors on stderr; never log a rejected password. After printing and flushing the
+password, print a blank line and a local zxcvbn evaluation to stderr (score, guesses, crack times
+and available feedback). `--no-score` disables the evaluation, not entropy warnings or errors.
 
 ## Toolchain
 
@@ -52,6 +54,7 @@ than suppressing them.
 
 - `clap` with `derive`, `env`, `suggestions`, `wrap_help` and colour features. Use the derive API.
 - `bip39` supplies the English dictionary for `pw`; `rand` supplies its OS-seeded cryptographic RNG.
+- `zxcvbn` supplies the optional password evaluation for `pw`.
 - `ratatui` and `crossterm` are pre-wired for any future TUI. `crossterm` has `osc52` enabled for clipboard
   writes over the terminal.
 

@@ -35,6 +35,7 @@ one password followed by a newline. The password must be **strictly longer** tha
 ```shell
 belt pw           # Default: longer than 16 characters (at least 17)
 belt pw 12        # Override: longer than 12 characters (at least 13)
+belt pw --no-score # Disable the password evaluation
 belt pw --help    # Show usage without generating a password
 ```
 
@@ -53,9 +54,12 @@ length before generating anything. With the current dictionary:
 | 26–28        | More than 70% of combinations are too short. Warn once about restricted entropy, then generate. |
 | 29 or more   | More than 95% are too short. Refuse the request (including `belt pw 32`) and exit non-zero.     |
 
-Each rejected candidate produces a retry notice without revealing the candidate. Warnings, retry
-notices and errors go to stderr, so stdout contains only the accepted password and its newline,
-or nothing on failure.
+After printing the password, `belt` writes a blank line and a local zxcvbn evaluation to stderr:
+a score from 0 to 4, estimated guesses, online and offline crack-time estimates, and any warning
+or suggestions. These are estimates, not security guarantees. `--no-score` disables the
+evaluation entirely, but not entropy warnings or errors. No password is sent to a service.
+Rejected candidates are never revealed. Stdout contains only the accepted password and its
+newline, or nothing on failure, so it remains suitable for piping.
 
 ## Development
 
@@ -99,6 +103,10 @@ Has `ur::bytewords` for the `tag` function.
 
 `bip39` supplies the English word list for `pw` and is a possible fallback for `bytewords`.
 `rand` provides OS-seeded cryptographic randomness for password generation.
+
+### `zxcvbn`
+
+Local password strength evaluation for `pw`.
 
 ## Licence
 

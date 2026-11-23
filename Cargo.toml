@@ -61,6 +61,7 @@ tera-contrib = { version = "0.3.0", features = [
   "urlencode",
 ] }
 ur = "0.5.2"
+zxcvbn = "3.1.1"
 
 [[bin]]
 name = "belt"

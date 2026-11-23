@@ -8,6 +8,47 @@ use rand::{
 };
 
 const WORD_COUNT: usize = 4;
+
+pub fn write_evaluation(password: &str, diagnostics: &mut impl Write) -> io::Result<()> {
+    let evaluation = zxcvbn::zxcvbn(password, &[]);
+    let crack_times = evaluation.crack_times();
+    writeln!(
+        diagnostics,
+        "\nzxcvbn password evaluation (estimates, not guarantees):"
+    )?;
+    writeln!(diagnostics, "  Score: {}/4", evaluation.score())?;
+    writeln!(diagnostics, "  Estimated guesses: {}", evaluation.guesses())?;
+    writeln!(diagnostics, "  Estimated crack times:")?;
+    for (scenario, duration) in [
+        (
+            "Online, throttled (100 guesses/hour)",
+            crack_times.online_throttling_100_per_hour(),
+        ),
+        (
+            "Online, unthrottled (10 guesses/second)",
+            crack_times.online_no_throttling_10_per_second(),
+        ),
+        (
+            "Offline, slow hashing (10,000 guesses/second)",
+            crack_times.offline_slow_hashing_1e4_per_second(),
+        ),
+        (
+            "Offline, fast hashing (10 billion guesses/second)",
+            crack_times.offline_fast_hashing_1e10_per_second(),
+        ),
+    ] {
+        writeln!(diagnostics, "    {scenario}: {duration}")?;
+    }
+    if let Some(feedback) = evaluation.feedback() {
+        if let Some(warning) = feedback.warning() {
+            writeln!(diagnostics, "  Warning: {warning}")?;
+        }
+        for suggestion in feedback.suggestions() {
+            writeln!(diagnostics, "  Suggestion: {suggestion}")?;
+        }
+    }
+    Ok(())
+}
 const GAP_COUNT: usize = WORD_COUNT - 1;
 const DIGITS: &[u8] = b"0123456789";
 const SYMBOLS: &[u8] = b"&+.,/-=?@#^%";
@@ -151,6 +192,34 @@ mod tests {
     use rand::TryRng;
 
     use super::*;
+
+    #[test]
+    fn evaluates_normal_empty_and_weak_passwords() {
+        for password in ["", "password", "CORRECT7horse+battery9STAPLE"] {
+            let mut diagnostics = Vec::new();
+            super::write_evaluation(password, &mut diagnostics).unwrap();
+            let diagnostics = String::from_utf8(diagnostics).unwrap();
+            let evaluation = zxcvbn::zxcvbn(password, &[]);
+            assert!(diagnostics.starts_with("\nzxcvbn password evaluation"));
+            assert!(diagnostics.contains(&format!("Score: {}/4", evaluation.score())));
+            assert!(diagnostics.contains(&format!("Estimated guesses: {}", evaluation.guesses())));
+            assert!(diagnostics.contains("Offline, fast hashing"));
+            if let Some(feedback) = evaluation.feedback() {
+                if let Some(warning) = feedback.warning() {
+                    assert!(diagnostics.contains(&format!("Warning: {warning}")));
+                }
+                for suggestion in feedback.suggestions() {
+                    assert!(diagnostics.contains(&format!("Suggestion: {suggestion}")));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn evaluation_propagates_write_errors() {
+        let error = super::write_evaluation("password", &mut BrokenWriter).unwrap_err();
+        assert_eq!(error.kind(), std::io::ErrorKind::BrokenPipe);
+    }
 
     #[test]
     fn distribution_counts_ordered_word_tuples_including_joiners() {
