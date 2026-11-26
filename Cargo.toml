@@ -36,6 +36,7 @@ crossterm = { version = "0.29.0", features = ["serde", "osc52"] }
 keyring = { version = "4.2.0", features = [
   "android-native-keyring-store",
   "apple-native-keyring-store",
+  "db-keystore",
   "dbus-secret-service-keyring-store",
   "linux-keyutils-keyring-store",
 ] }
