@@ -83,7 +83,7 @@ What's next?
 - Use the `ur` crate to encode passwords as URs for QR codes.
   - The `qrcode` crate might be an alternative or complementary.
   - Add a `--qr` flag and config option to print a QR code to the terminal.
-- Use the `arboard` crate to access the clipboard.
+- Use the `arboard` and/or `clipboard-rs` crate(s) to access the clipboard.
   - Add a `--copy` flag and config option to copy the generated password to the clipboard.
     - Add a `--copy-only` flag and config option to copy the generated password to the clipboard without printing it.
     - Maybe there's a cleaner way to split the `--copy` / `--copy-only` flags?
