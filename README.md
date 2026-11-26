@@ -3,7 +3,7 @@
 [![CI](https://github.com/synmux/belt/actions/workflows/ci.yml/badge.svg)](https://github.com/synmux/belt/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A CLI toolbelt, written in Rust. Its `pw` command generates four-word passwords.
+A CLI toolbelt, written in Rust. Its `pw` command generates five-word passwords.
 
 > **Status:** pre-alpha. `belt` is being rewritten from scratch in Rust.
 
@@ -33,29 +33,30 @@ Running `belt` without arguments shows the available commands. Use `belt pw [MIN
 one password followed by a newline. The password must be **strictly longer** than `MIN_LENGTH`:
 
 ```shell
-belt pw           # Default: longer than 16 characters (at least 17)
-belt pw 12        # Override: longer than 12 characters (at least 13)
+belt pw           # Default: longer than 18 characters (at least 19)
+belt pw 24        # Override: longer than 24 characters (at least 25)
 belt pw --help    # Show usage without generating a password
 ```
 
-Each password uses four words drawn independently from the English BIP39 dictionary; words may
-repeat. Between one and three randomly chosen words are uppercase and the rest are lowercase.
-The three gaps each contain one ASCII digit (`0`–`9`) or one symbol from `&+.,/-=?@#^%`; both
+Each password uses five words drawn independently from the English BIP39 dictionary; words may
+repeat. Between one and four randomly chosen words are uppercase and the rest are lowercase.
+The four gaps each contain one ASCII digit (`0`–`9`) or one symbol from `&+.,/-=?@#^%`; both
 types occur in every password. All random choices use a cryptographically secure generator seeded
 from the operating system.
 
 Longer minima exclude more word combinations. `belt` checks the fraction excluded by the requested
-length before generating anything. With the current dictionary:
+length before generating anything. The shortest possible password is 19 characters, so the default
+of 18 is the longest minimum that excludes nothing and costs no entropy. With the current dictionary:
 
 | `MIN_LENGTH` | Behaviour                                                                                       |
 | ------------ | ----------------------------------------------------------------------------------------------- |
-| 0–25         | Generate without an entropy warning.                                                            |
-| 26–28        | More than 70% of combinations are too short. Warn once about restricted entropy, then generate. |
-| 29 or more   | More than 95% are too short. Refuse the request (including `belt pw 32`) and exit non-zero.     |
+| 0–31         | Generate without an entropy warning.                                                            |
+| 32–35        | More than 70% of combinations are too short. Warn once about restricted entropy, then generate. |
+| 36 or more   | More than 95% are too short. Refuse the request and exit non-zero.                              |
 
-Each rejected candidate produces a retry notice without revealing the candidate. Warnings, retry
-notices and errors go to stderr, so stdout contains only the accepted password and its newline,
-or nothing on failure.
+Candidates that are too short are discarded and regenerated silently, so a rejected candidate is
+never printed. Warnings and errors go to stderr, so stdout contains only the accepted password and
+its newline, or nothing on failure.
 
 ## Development
 
@@ -83,6 +84,10 @@ CLI arg parsing and TUI.
 
 Extra goo for `clap`.
 
+### `clap_mangen`
+
+Build dependency for generating man pages. Needs a `build.rs`, which doesn't exist yet.
+
 ### `shadow-rs`
 
 Pull crate metadata into the live code.
@@ -94,6 +99,10 @@ Generate bytes for `ur`.
 ### `ur`
 
 Has `ur::bytewords` for the `tag` function.
+
+### `tera`, `tera-contrib`
+
+Template rendering, plus extra filters and functions from `tera-contrib`.
 
 ### `bip39`, `rand`
 

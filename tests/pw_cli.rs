@@ -19,15 +19,15 @@ fn assert_password(output: &Output, min_length: usize) {
     let words: Vec<_> = password
         .split(|letter: char| letter.is_ascii_digit() || "&+.,/-=?@#^%".contains(letter))
         .collect();
-    assert_eq!(words.len(), 4);
+    assert_eq!(words.len(), 5);
     assert!(words.iter().all(|word| !word.is_empty()
         && word.bytes().all(|letter| letter.is_ascii_alphabetic())));
 }
 
 #[test]
-fn default_prints_only_one_password_longer_than_sixteen() {
+fn default_prints_only_one_password_longer_than_eighteen() {
     let output = belt(&["pw"]);
-    assert_password(&output, 16);
+    assert_password(&output, 18);
 }
 
 // The unit tests in `src/main.rs` check that zero reaches the generator; this checks the process.
@@ -39,24 +39,26 @@ fn zero_minimum_prints_a_password_without_diagnostics() {
 }
 
 #[test]
-fn warned_request_prints_one_warning_then_only_retry_notices_to_stderr() {
-    let output = belt(&["pw", "26"]);
-    assert_password(&output, 26);
+fn warned_request_prints_only_one_warning_to_stderr() {
+    let output = belt(&["pw", "32"]);
+    assert_password(&output, 32);
     let mut lines = str::from_utf8(&output.stderr).unwrap().lines();
     assert_eq!(
         lines.next(),
-        Some("Warning: a minimum length of 26 significantly restricts password entropy.")
+        Some("Warning: a minimum length of 32 significantly restricts password entropy.")
     );
+    assert_eq!(lines.next(), None);
 }
 
 #[test]
 fn refused_request_explains_failure_without_stdout() {
-    let output = belt(&["pw", "32"]);
+    let output = belt(&["pw", "36"]);
     assert!(!output.status.success());
     assert!(output.stdout.is_empty());
     let diagnostics = str::from_utf8(&output.stderr).unwrap();
     assert!(diagnostics.contains("refusing to generate a password"));
-    assert!(diagnostics.contains("32") && diagnostics.contains("95%"));
+    assert!(diagnostics.contains("36") && diagnostics.contains("95%"));
+    assert!(diagnostics.contains("five-word combinations"));
 }
 
 #[test]
@@ -77,7 +79,7 @@ fn pw_help_explains_the_exclusive_default() {
     let help = str::from_utf8(&output.stdout).unwrap();
     assert!(help.contains("belt pw [MIN_LENGTH]"));
     assert!(help.contains("strictly longer"));
-    assert!(help.contains("[default: 16]"));
+    assert!(help.contains("[default: 18]"));
 }
 
 #[test]

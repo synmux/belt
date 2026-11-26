@@ -7,17 +7,26 @@ use rand::{
     seq::SliceRandom,
 };
 
-const WORD_COUNT: usize = 4;
+pub const DEFAULT_MIN_LENGTH: usize = 18;
+const WORD_COUNT: usize = 5;
 const GAP_COUNT: usize = WORD_COUNT - 1;
 const DIGITS: &[u8] = b"0123456789";
 const SYMBOLS: &[u8] = b"&+.,/-=?@#^%";
-const GAP_PATTERNS: [[&[u8]; GAP_COUNT]; 6] = [
-    [DIGITS, DIGITS, SYMBOLS],
-    [DIGITS, SYMBOLS, DIGITS],
-    [SYMBOLS, DIGITS, DIGITS],
-    [SYMBOLS, SYMBOLS, DIGITS],
-    [SYMBOLS, DIGITS, SYMBOLS],
-    [DIGITS, SYMBOLS, SYMBOLS],
+const GAP_PATTERNS: [[&[u8]; GAP_COUNT]; 14] = [
+    [DIGITS, DIGITS, DIGITS, SYMBOLS],
+    [DIGITS, DIGITS, SYMBOLS, DIGITS],
+    [DIGITS, DIGITS, SYMBOLS, SYMBOLS],
+    [DIGITS, SYMBOLS, DIGITS, DIGITS],
+    [DIGITS, SYMBOLS, DIGITS, SYMBOLS],
+    [DIGITS, SYMBOLS, SYMBOLS, DIGITS],
+    [DIGITS, SYMBOLS, SYMBOLS, SYMBOLS],
+    [SYMBOLS, DIGITS, DIGITS, DIGITS],
+    [SYMBOLS, DIGITS, DIGITS, SYMBOLS],
+    [SYMBOLS, DIGITS, SYMBOLS, DIGITS],
+    [SYMBOLS, DIGITS, SYMBOLS, SYMBOLS],
+    [SYMBOLS, SYMBOLS, DIGITS, DIGITS],
+    [SYMBOLS, SYMBOLS, DIGITS, SYMBOLS],
+    [SYMBOLS, SYMBOLS, SYMBOLS, DIGITS],
 ];
 
 fn generate_candidate(rng: &mut impl CryptoRng) -> String {
@@ -123,7 +132,7 @@ where
             return Err(io::Error::new(
                 io::ErrorKind::InvalidInput,
                 format!(
-                    "refusing to generate a password: a minimum length of {min_length} rejects more than 95% of all four-word combinations, which leaves you with terrible password entropy. It'll be more secure with fewer characters. Ironically enough."
+                    "refusing to generate a password: a minimum length of {min_length} rejects more than 95% of all five-word combinations, which leaves you with terrible password entropy. It'll be more secure with fewer characters. Ironically enough."
                 ),
             ));
         }
@@ -156,22 +165,30 @@ mod tests {
     fn distribution_counts_ordered_word_tuples_including_joiners() {
         let counts = length_distribution();
         let total: u64 = counts.iter().sum();
-        assert_eq!(total, 2048_u64.pow(4));
-        for (minimum, basis_points) in [(25, 6379), (26, 7714), (28, 9378), (29, 9743)] {
-            let rejected: u64 = counts[..=minimum].iter().sum();
+        assert_eq!(total, 2048_u64.pow(5));
+        let total = u128::from(total);
+        for (minimum, basis_points) in [(31, 5696), (32, 7004), (35, 9438), (36, 9745)] {
+            let rejected = u128::from(counts[..=minimum].iter().sum::<u64>());
             assert_eq!((10_000 * rejected + total / 2) / total, basis_points);
         }
+    }
+
+    #[test]
+    fn default_is_the_longest_minimum_that_rejects_no_combinations() {
+        let counts = length_distribution();
+        assert_eq!(counts[..=DEFAULT_MIN_LENGTH].iter().sum::<u64>(), 0);
+        assert!(counts[DEFAULT_MIN_LENGTH + 1] > 0);
     }
 
     #[test]
     fn classifies_both_entropy_thresholds() {
         for (minimum, expected) in [
             (0, LengthPolicy::Allow),
-            (25, LengthPolicy::Allow),
-            (26, LengthPolicy::Warn),
-            (28, LengthPolicy::Warn),
-            (29, LengthPolicy::Refuse),
-            (32, LengthPolicy::Refuse),
+            (31, LengthPolicy::Allow),
+            (32, LengthPolicy::Warn),
+            (35, LengthPolicy::Warn),
+            (36, LengthPolicy::Refuse),
+            (40, LengthPolicy::Refuse),
             (usize::MAX, LengthPolicy::Refuse),
         ] {
             assert_eq!(length_policy(minimum), expected, "minimum: {minimum}");
@@ -227,7 +244,7 @@ mod tests {
 
     #[test]
     fn warns_once_and_retries_without_disclosing_candidates() {
-        let minimum = 26;
+        let minimum = 32;
         let below = "private";
         let equal = "x".repeat(minimum);
         let above = "y".repeat(minimum + 1);
@@ -266,7 +283,7 @@ mod tests {
 
     #[test]
     fn failed_diagnostic_writes_do_not_withhold_the_password() {
-        let minimum = 26;
+        let minimum = 32;
         let equal = "x".repeat(minimum);
         let above = "y".repeat(minimum + 1);
         let mut candidates = [equal, above.clone()].into_iter();
@@ -278,7 +295,7 @@ mod tests {
     }
 
     #[test]
-    fn candidates_have_four_cased_dictionary_words_and_mixed_joiners() {
+    fn candidates_have_five_cased_dictionary_words_and_mixed_joiners() {
         let dictionary = Language::English.word_list();
         let mut rng = StdRng::from_seed([42; 32]);
         for _ in 0..128 {
@@ -286,7 +303,7 @@ mod tests {
             let words: Vec<_> = candidate
                 .split(|letter: char| !letter.is_ascii_alphabetic())
                 .collect();
-            assert_eq!(words.len(), 4);
+            assert_eq!(words.len(), 5);
             let mut uppercase_count = 0;
             for word in words {
                 assert!(dictionary.contains(&word.to_ascii_lowercase().as_str()));
@@ -296,15 +313,15 @@ mod tests {
                     assert!(word.bytes().all(|letter| letter.is_ascii_lowercase()));
                 }
             }
-            assert!((1..=3).contains(&uppercase_count));
+            assert!((1..=4).contains(&uppercase_count));
 
             let joiners: Vec<_> = candidate
                 .bytes()
                 .filter(|byte| !byte.is_ascii_alphabetic())
                 .collect();
-            assert_eq!(joiners.len(), 3);
+            assert_eq!(joiners.len(), 4);
             let digit_count = joiners.iter().filter(|byte| byte.is_ascii_digit()).count();
-            assert!((1..=2).contains(&digit_count));
+            assert!((1..=3).contains(&digit_count));
             assert!(
                 joiners
                     .iter()

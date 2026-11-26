@@ -14,11 +14,11 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Command {
-    /// Generate a password from four English BIP39 words.
+    /// Generate a password from five English BIP39 words.
     Pw {
         /// Require a password strictly longer than MIN_LENGTH.
-        /// The default gives at least 17 characters; smaller values are allowed.
-        #[arg(default_value_t = 16)]
+        /// The default gives at least 19 characters; smaller values are allowed.
+        #[arg(default_value_t = pw::DEFAULT_MIN_LENGTH)]
         min_length: usize,
     },
 }
@@ -58,7 +58,7 @@ mod tests {
     #[test]
     fn positional_value_including_zero_reaches_the_generator_in_place_of_the_default() {
         for (arguments, expected_minimum) in [
-            (&["belt", "pw"][..], 16),
+            (&["belt", "pw"][..], 18),
             (&["belt", "pw", "8"][..], 8),
             (&["belt", "pw", "0"][..], 0),
         ] {
