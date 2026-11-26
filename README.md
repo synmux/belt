@@ -72,6 +72,23 @@ GitHub Actions dependencies current.
 
 Guidance for AI coding agents lives in [`AGENTS.md`](AGENTS.md) (`CLAUDE.md` is a symlink to it).
 
+## Plans
+
+What's next?
+
+### `belt pw`
+
+- Use the `keyring` crate to access the OS keychain.
+  - Add a `--save` flag and config option to store the generated password in the OS keychain.
+- Use the `ur` crate to encode passwords as URs for QR codes.
+  - The `qrcode` crate might be an alternative or complementary.
+  - Add a `--qr` flag and config option to print a QR code to the terminal.
+- Use the `arboard` crate to access the clipboard.
+  - Add a `--copy` flag and config option to copy the generated password to the clipboard.
+    - Add a `--copy-only` flag and config option to copy the generated password to the clipboard without printing it.
+    - Maybe there's a cleaner way to split the `--copy` / `--copy-only` flags?
+    - `crossterm` supports OSC 52 clipboard sequences. That might be funky.
+
 ## Dependencies
 
 Mostly a way to remind myself why I've pulled something in.

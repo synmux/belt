@@ -19,3 +19,4 @@ mr-boxington = { version = "1.30.0", workflow = "release.yml@refs/heads/main" }
 
 [tasks]
 bump = { run = "op run -- mise upgrade --bump --local", env = { GITHUB_TOKEN = "op://Personal/github-token/token" } }
+rebuild = { run = "mbx build --release && cp target/release/belt ~/.local/bin/" }
